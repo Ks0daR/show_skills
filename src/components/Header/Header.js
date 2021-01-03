@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import InputForm from "../InputForm";
 import { CSSTransition } from "react-transition-group";
 import styles from "./Header.module.css";
@@ -10,29 +10,35 @@ const Header = () => {
 
   const isOpen = openMenu ? styles.buttonIsOpen : styles.button;
 
+  const nodeRef = React.useRef(null); // fix Warning: findDOMNode is deprecated in StrictMode
+
   return (
     <div className={styles.container}>
       <CSSTransition
+        nodeRef={nodeRef}
         in={true}
         appear
         timeout={500}
         classNames={animatedStyles}
-        unmountOnExit
       >
-        <div className={styles.logo}>
-          <h1>Logo</h1>
+        <div ref={nodeRef}>
+          <h1 className={styles.logo}>Logo</h1>
         </div>
       </CSSTransition>
+      <button className={styles.buttonMenu} onClick={handleToggleMenu}>
+        {openMenu ? "X" : "MENU"}
+      </button>
 
-      {openMenu ? (
-        <div className={styles.menuList}>
+      <CSSTransition
+        nodeRef={nodeRef}
+        in={openMenu}
+        timeout={500}
+        classNames={animatedStyles}
+        onExited={() => setOpenMenu(false)}
+        unmountOnExit
+      >
+        <div ref={nodeRef} className={styles.menuList}>
           <div className={styles.buttons}>
-            <button
-              className={openMenu ? styles.buttonMenuIsOpen : styles.button}
-              onClick={handleToggleMenu}
-            >
-              Menu
-            </button>
             <InputForm />
             <button className={isOpen}>Home</button>
             <button className={isOpen}>About</button>
@@ -40,13 +46,7 @@ const Header = () => {
             <button className={isOpen}>Create</button>
           </div>
         </div>
-      ) : (
-        <div className={styles.buttons}>
-          <button className={styles.button} onClick={handleToggleMenu}>
-            Menu
-          </button>
-        </div>
-      )}
+      </CSSTransition>
     </div>
   );
 };
