@@ -1,5 +1,16 @@
 .input {
-  width: 15rem;
+  width: 10vw;
   border-radius: 10px;
   font-size: 1.2rem;
+}
+
+@media (max-width: 992px) {
+  .input {
+    width: 25vw;
+  }
+}
+@media (max-width: 768px) {
+  .input {
+    width: 30vw;
+  }
 }

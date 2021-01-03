@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import InputForm from "../InputForm";
 import { CSSTransition } from "react-transition-group";
+import { NavLink } from "react-router-dom";
+import InputForm from "../InputForm";
 import styles from "./Header.module.css";
 import animatedStyles from "./animatedStylesHeader.module.css";
+import { routes } from "../routes";
 
 const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const handleToggleMenu = () => setOpenMenu((prev) => !prev);
-
-  const isOpen = openMenu ? styles.buttonIsOpen : styles.button;
 
   const nodeRef = React.useRef(null); // fix Warning: findDOMNode is deprecated in StrictMode
 
@@ -40,10 +40,15 @@ const Header = () => {
         <div ref={nodeRef} className={styles.menuList}>
           <div className={styles.buttons}>
             <InputForm />
-            <button className={isOpen}>Home</button>
-            <button className={isOpen}>About</button>
-            <button className={isOpen}>Log in</button>
-            <button className={isOpen}>Create</button>
+            {routes.map(({ name, to }) => (
+              <NavLink
+                to={to}
+                className={styles.link}
+                activeClassName={styles.activeLink}
+              >
+                {name}
+              </NavLink>
+            ))}
           </div>
         </div>
       </CSSTransition>
